@@ -1,6 +1,6 @@
 {
-  "name": "@lesleyxyz/node-firewalla",
-  "version": "1.0.0",
+  "name": "node-firewalla",
+  "version": "1.0.2",
   "author": "Lesley De Keyser",
   "license": "ISC",
   "type": "module",
@@ -37,5 +37,17 @@
   },
   "devDependencies": {
     "shx": "^0.3.4"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/types/index.d.ts",
+        "default": "./lib/esm/index.mjs"
+      },
+      "require": {
+        "types": "./lib/cjs/types/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
+    }
   }
 }
