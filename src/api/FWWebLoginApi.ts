@@ -1,5 +1,6 @@
 import { Networker } from "./Networker.js"
 import { AuthApi } from "./AuthApi.js"
+import { FWWebGroupApi } from "./FWWebGroupApi.js"
 
 class FWWebLoginApi extends AuthApi {
     static _instance: FWWebLoginApi
@@ -11,7 +12,22 @@ class FWWebLoginApi extends AuthApi {
         super()
 		FWWebLoginApi._instance = this
 
-        this.setApiNetworker(new Networker(`https://my.firewalla.com/`))
+        this.setApiNetworker(new Networker(`https://my.firewalla.com`))
+    }
+
+    async getBoxes(): Promise<[FWWebGroupApi]> {
+        let boxes = await this.getApiNetworker().authGetRelative("/v1/box/list")
+
+        return boxes.map(box => {
+            let api = new FWWebGroupApi(box.gid)
+            api.setAuth(this.getApiNetworker().authToken)
+            return api
+        })
+    }
+
+    async getBoxById(gid): Promise<FWWebGroupApi> {
+        let boxes = await this.getBoxes()
+        return boxes.filter(b => b.gid == gid)[0]
     }
 }
 

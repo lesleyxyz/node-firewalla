@@ -3,3 +3,6 @@ dist/
 node_modules/
 *.tgz
 lib/
+etp.private.pem
+etp.public.pem
+test.ts

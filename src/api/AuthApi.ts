@@ -1,15 +1,17 @@
-export class AuthApi {
-    apiNetworker
+import { Networker } from "./Networker.js"
 
-    getApiNetworker(){
+export class AuthApi {
+    apiNetworker: Networker
+
+    getApiNetworker(): Networker{
         return this.apiNetworker
 	}
 
-    setApiNetworker(apiNetworker){
+    setApiNetworker(apiNetworker: Networker){
         this.apiNetworker = apiNetworker
     }
 
-    setAuth(token){
+    setAuth(token: string){
         this.getApiNetworker().setAuth(token)
     }
 }
