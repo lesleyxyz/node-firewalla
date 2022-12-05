@@ -6,9 +6,9 @@ export class FWGetInternetSpeedtestResultsMessage extends FWMessage {
     /**
      * @param {Date} begin - Only return speedtests after this date
      */
-    constructor(begin = 0){
-        super("get", { item: "networkMonitorData", value: {
-            begin: (begin / 1000)
+    constructor(begin: Date = new Date(0)){
+        super("get", { item: "internetSpeedtestResults", value: {
+            begin: (Number(begin) / 1000)
         }})
     }
 }

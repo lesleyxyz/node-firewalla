@@ -135,7 +135,13 @@ class FWGroupApi extends AuthApi {
             throw response.error
         }
     
-        return JSON.parse(SecureUtil.aesDecrypt(response.message, encryptionKey))
+        response = JSON.parse(SecureUtil.aesDecrypt(response.message, encryptionKey))
+
+        if(response.code !== 200){
+            throw response
+        }
+
+        return response.data
     }
 }
 
