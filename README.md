@@ -14,5 +14,5 @@ let {groups} = await FWGroupApi.login(email)
 let fwGroup = FWGroup.fromJson(groups[0], "192.168.1.1")
 
 // Send a ping message
-let pingResult = await FWGroupApi.sendMessageBox(fwGroup, true, new FWPingMessage())
+let pingResult = await FWGroupApi.sendMessageBox(fwGroup, new FWPingMessage())
 ```

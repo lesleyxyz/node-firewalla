@@ -1,7 +1,10 @@
 import crypto from 'crypto';
 
 
-export class FWMessage {
+export interface FWMessageResult {}
+
+
+export abstract class FWMessage<T extends FWMessageResult> {
 	type: string
 	data: object
 	target: string
@@ -19,7 +22,7 @@ export class FWMessage {
         this.uuid = crypto.randomUUID()
     }
 
-    toJSON(eid: string){
+    toJSON(eid: string) {
         return {
             mtype: "msg",
             message: {
@@ -47,4 +50,6 @@ export class FWMessage {
             }
         }
     }
+
+    abstract parseResult(result: object): T
 }

@@ -2,7 +2,7 @@ import { Networker } from "./Networker.js"
 import { AuthApi } from "./AuthApi.js"
 import { SecureUtil } from '../utils/index.js'
 import fetch from "node-fetch";
-import { FWGroup, FWMessage } from "../models/index.js";
+import { FWGroup, FWMessage, FWMessageResult } from "../models/index.js";
 import FWWebLoginAPI from "./FWWebLoginAPI.js";
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
@@ -120,7 +120,7 @@ class FWGroupApi extends AuthApi {
         return response
     }
 
-    async sendMessageToBox(fwGroup: FWGroup, useLocal: boolean, fwMessage: FWMessage): Promise<any> {
+    async sendMessageToBox<T extends FWMessageResult>(fwGroup: FWGroup, fwMessage: FWMessage<T>, useLocal: boolean = true): Promise<T> {
         let url = fwGroup.getMessageUrl(useLocal)
         let encryptionKey = fwGroup.getSymmetricKey()
         let messageString = JSON.stringify(fwMessage.toJSON(fwGroup.eid))
@@ -130,18 +130,18 @@ class FWGroupApi extends AuthApi {
             timestamp: Math.floor(Number(new Date()) / 1000),
             message
         })
-    
+
         if(response.error){
             throw response.error
         }
-    
+
         response = JSON.parse(SecureUtil.aesDecrypt(response.message, encryptionKey))
 
         if(response.code !== 200){
             throw response
         }
 
-        return response.data
+        return fwMessage.parseResult(response.data)
     }
 }
 
