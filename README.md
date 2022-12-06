@@ -7,7 +7,7 @@ If you want to get your firewalla token, or want to help reverse engineering fir
 import { SecureUtil, NetworkService, FWGroup, FWGroupApi, HostService } from 'node-firewalla'
 
 // Import your public & private key (by file name)
-SecureUtil.importKeyPair(publicKey, privateKey)
+SecureUtil.importKeyPair(publicKeyPath, privateKeyPath)
 
 // Login & get firewalla box
 let { groups } = await FWGroupApi.login()
@@ -95,7 +95,7 @@ Manage hosts connected to your box
 ## InitService
 Get initial data of your box
 ### .init
-### .liveStats
+### .liveStats (WIP)
 
 ---
 
