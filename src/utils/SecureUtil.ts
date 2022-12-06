@@ -1,4 +1,6 @@
 import crypto from 'crypto';
+import fs from 'fs';
+
 
 class SecureUtil {
 	static _instance: SecureUtil
@@ -28,9 +30,14 @@ class SecureUtil {
 		this.importKeyPair(publicKey, privateKey)
 	}
 
-	importKeyPair(publicKey: string, privateKey: string){
+	importKeyPairFromString(publicKey: string, privateKey: string){
 		this.publicKey = publicKey
 		this.privateKey = privateKey
+	}
+
+	importKeyPair(publicKeyPath: string, privateKeyPath: string){
+		this.publicKey = fs.readFileSync(publicKeyPath, {encoding: "utf-8"})
+		this.privateKey = fs.readFileSync(privateKeyPath, {encoding: "utf-8"})
 	}
 
 	rsaDecrypt(cipherBase64: string): string {

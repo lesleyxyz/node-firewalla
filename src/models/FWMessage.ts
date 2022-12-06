@@ -4,7 +4,7 @@ import crypto from 'crypto';
 export interface FWMessageResult {}
 
 
-export abstract class FWMessage<T extends FWMessageResult> {
+export class FWMessage {
 	type: string
 	data: object
 	target: string
@@ -13,7 +13,7 @@ export abstract class FWMessage<T extends FWMessageResult> {
     /**
      * @param {string} type - message type (cmd, init, set, get)
      * @param {object} data - the payload of the message
-     * @param {string} target - ?? unknown parameter
+     * @param {string} target - the host that needs to receive the message
      */
     constructor(type: string, data: object, target: string = "0.0.0.0"){
         this.type = type
@@ -50,6 +50,4 @@ export abstract class FWMessage<T extends FWMessageResult> {
             }
         }
     }
-
-    abstract parseResult(result: object): T
 }

@@ -1,5 +1,4 @@
-import { Url } from "url";
-import { FWMessage, FWMessageResult } from "../FWMessage.js";
+import { FWMessage, FWDataPlan, FWHost } from "./index.js";
 
 interface FWInitSpeedResult {
     timestamp: number,
@@ -22,66 +21,7 @@ interface EMember {
     lastVisit?: string
 }
 
-interface FWHost {
-    dtype: {
-        human: number
-    },
-    ip: string,
-    ipv6: [string],
-    mac: string,
-    lastActive: string,
-    firstFound: string,
-    macVendor: string,
-    recentActivity: string,
-    dhcpName: string,
-    bonjourName: string,
-    userLocalDomain: string,
-    localDomain: string,
-    intf: string,
-    stpPort: string,
-    bname: string,
-    names: [string],
-    activities: [any],
-    name: string,
-    policy: {
-        devicePresence: boolean,
-        deviceOffline: boolean,
-        adblock: boolean,
-        blockin: boolean,
-        family: boolean,
-        monitor: boolean,
-        device_service_scan: boolean,
-        tags: [string],
-        safeSearch: {
-          state: boolean
-        },
-        ipAllocation: {
-          allocations: any,
-          dhcpIgnore: boolean
-        },
-        vpnClient: {
-          state: boolean
-        },
-        dnsmasq: {
-          dnsCaching: boolean
-        },
-        doh: {
-          state: boolean
-        },
-        acl: boolean,
-        aclTimer: any
-    },
-    tags: [string],
-    flowsummary: {
-        inbytes: number,
-        outbytes: number,
-    },
-    openports: {
-        lastActiveTimestamp: number
-    }
-}
-
-export interface FWInitResult extends FWMessageResult {
+interface FWInitResult {
     ruleGroups: any,
     network: {
         name: string,
@@ -134,10 +74,7 @@ export interface FWInitResult extends FWMessageResult {
     archivedAlarmCount: number,
     jwt: string,
     groupName: string,
-    dataUsagePlan: {
-        total: number,
-        date: number
-    },
+    dataUsagePlan: FWDataPlan,
     btMac: string,
     ddns: string,
     internetSpeedtestResults: [FWInitSpeedResult],
@@ -331,11 +268,11 @@ export interface FWInitResult extends FWMessageResult {
     cloudConnected: boolean,
 }
 
-export class FWInitMessage extends FWMessage<FWInitResult> {
+export class FWInitMessage extends FWMessage {
     /**
-     * @param {string} target - ?? unknown parameter
+     * @param {string} target - the host you want to data from
      */
-    constructor(target = "0.0.0.0"){
+    constructor(target: string = "0.0.0.0"){
         super("init", { get: target })
     }
 

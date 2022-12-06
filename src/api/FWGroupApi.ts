@@ -2,8 +2,9 @@ import { Networker } from "./Networker.js"
 import { AuthApi } from "./AuthApi.js"
 import { SecureUtil } from '../utils/index.js'
 import fetch from "node-fetch";
-import { FWGroup, FWMessage, FWMessageResult } from "../models/index.js";
+import { FWGroup, FWMessage } from "../models/index.js";
 import FWWebLoginAPI from "./FWWebLoginAPI.js";
+import querystring from 'node:querystring';
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 interface FWQRCode {
@@ -44,8 +45,14 @@ class FWGroupApi extends AuthApi {
         this.setApiNetworker(new Networker(`https://firewalla.encipher.io/app/api/${serverInstance}`))
     }
 
-    async receiveMessageFromGroup(fwGroup: FWGroup){
-        return this.getApiNetworker().authGetRelative(`/service/message/${fwGroup.aid}/${fwGroup.gid}/eptgroup/${fwGroup.eid}?count=100&peerId=${fwGroup.gid}&since=0`)
+    async receiveMessageFromGroup(fwGroup: FWGroup, count: number = 1, since: number = 0){
+        let query = querystring.encode({
+            count, 
+            peerId: fwGroup.gid,
+            since,
+        })
+
+        return this.getApiNetworker().authGetRelative(`/service/message/${fwGroup.aid}/${fwGroup.gid}/eptgroup/${fwGroup.eid}?${query}`)
     }
 
     async startRendezVous(rendezVousId: string, license: string){
@@ -79,6 +86,9 @@ class FWGroupApi extends AuthApi {
         }while(!newGroup)
     }
 
+    /**
+     * @param email - The email that should be linked to the ETP token (Only required when first creating your ETP token)
+     */
     async login(email: string = "") {
         let body = {
             assertion: {
@@ -120,14 +130,15 @@ class FWGroupApi extends AuthApi {
         return response
     }
 
-    async sendMessageToBox<T extends FWMessageResult>(fwGroup: FWGroup, fwMessage: FWMessage<T>, useLocal: boolean = true): Promise<T> {
-        let url = fwGroup.getMessageUrl(useLocal)
+    async sendMessageToBox(fwGroup: FWGroup, fwMessage: FWMessage): Promise<any> {
+        let url = fwGroup.getMessageUrl()
         let encryptionKey = fwGroup.getSymmetricKey()
         let messageString = JSON.stringify(fwMessage.toJSON(fwGroup.eid))
         let message = SecureUtil.aesEncrypt(messageString, encryptionKey)
-    
+        let timestamp = Math.floor(Number(new Date()) / 1000)
+
         let response = await this.getApiNetworker().authPost(url, {
-            timestamp: Math.floor(Number(new Date()) / 1000),
+            timestamp,
             message
         })
 
@@ -141,7 +152,7 @@ class FWGroupApi extends AuthApi {
             throw response
         }
 
-        return fwMessage.parseResult(response.data)
+        return response.data
     }
 }
 
