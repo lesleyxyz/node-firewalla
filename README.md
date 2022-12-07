@@ -5,6 +5,11 @@ If you want to get your firewalla token, or want to help reverse engineering fir
 
 If you like my work, give this reposiitory a `⭐` or [Buy Me A Coffee ☕](https://www.buymeacoffee.com/lesleyxyz)
 
+# Installation
+```bash
+npm install node-firewalla
+```
+
 # Examples
 ```js
 import { SecureUtil, NetworkService, FWGroup, FWGroupApi, HostService } from 'node-firewalla'
