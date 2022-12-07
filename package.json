@@ -1,6 +1,6 @@
 {
   "name": "node-firewalla",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "Lesley De Keyser",
   "license": "ISC",
   "type": "module",
