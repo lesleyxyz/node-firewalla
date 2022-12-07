@@ -3,7 +3,7 @@ Package to talk your firewalla box & API
 
 If you want to get your firewalla token, or want to help reverse engineering firewalla, checkout [firewalla-tools](https://github.com/lesleyxyz/firewalla-tools/)
 
-If you like my work, give this reposiitory a `⭐` or consider [Buying Me A Coffee ☕](https://www.buymeacoffee.com/lesleyxyz)
+If you like my work, give this repository a `⭐` or consider [Buying Me A Coffee ☕](https://www.buymeacoffee.com/lesleydk)
 
 # Installation
 ```bash
